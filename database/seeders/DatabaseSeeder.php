@@ -19,6 +19,8 @@ class DatabaseSeeder extends Seeder
             ProfessorSeeder::class,
             SubjectSeeder::class,
             PostSeeder::class,
+            LikeSeeder::class,
+            SubjectUserSeeder::class,
         ]);
     }
 }

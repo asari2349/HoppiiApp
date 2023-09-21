@@ -19,10 +19,11 @@ class UserSeeder extends Seeder
     public function run()
     {
         DB::table('users')->insert([
-            'name' => 'test',
+            'name' => 'test_name',
             'password' => Hash::make('test'),
             'created_at' => new DateTime(),
             'updated_at' => new DateTime(),
+            'email' => 'test@test'
          ]);
     }
 }
