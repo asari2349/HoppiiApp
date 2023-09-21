@@ -5,11 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Professor extends Model
+class Like extends Model
 {
     use HasFactory;
-    public function Subjects()   
-    {
-        return $this->hasMany(Subject::class);  
-    }
+
 }
