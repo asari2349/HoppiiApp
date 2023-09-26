@@ -13,8 +13,12 @@ class Subject extends Model
         return $this->belongsTo(Professor::class);
     }
     
-    public function subjects()
+    public function posts()
     {
-        return $this->hasMany(Subject::class);  
+        return $this->hasMany(Post::class);  
+    }
+    public function users()
+    {
+        return $this->belongsToMany(User::class,'subject_user');
     }
 }
