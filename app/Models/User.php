@@ -44,11 +44,15 @@ class User extends Authenticatable
     
     public function posts()
     {
-        return $this->hasMany(Post::class);  
+        return $this->hasMany(Post::class);
     }
-    public function postslike()
+    public function likes()
     {
-        return $this->belongsToMany(Post::class,'likes');
+        return $this->hasMany(Like::class);
+    }
+    public function subjects()
+    {
+        return $this->belongsToMany(Subject::class,'subject_user');
     }
     
 }

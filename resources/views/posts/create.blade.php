@@ -1,18 +1,13 @@
 <x-app-layout>
-
-
-@foreach($posts as $post)
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    <form action="/index" method="POST">
+                    <form action="/posts/index" method="POST">
                         @csrf
-                            <select name="post[category_id]">
-                    @foreach($categories as $category)
-                        <option value="{{ $category->id }}">{{ $category->name }}</option>
-                    @endforeach
-                </select>
+                        @method('POST')
+                        <input type="hidden" name="post[subject_id]" value={{ $subject->id }}>
+                        <h2 name = >{{$subject->name}}</h2>
                         <div class="title">
                             <h2>Title</h2>
                             <input type="text" name="post[title]" placeholder="タイトル"/>
@@ -51,15 +46,12 @@
                                 <option value="5">5</option>
                             </select>
                         </div>
-                           
-                            
-                            
-                        <input type="submit" value="store"/>
+                        <input type="submit" value="post"/>
                     </form>
                 </div>
             </div>
         </div>
     </div>  
-@endforeach
+
 
 </x-app-layout>

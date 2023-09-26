@@ -8,6 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class Post extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'title' ,
+        'body' ,
+        'ease' ,
+        'materialQuality' ,
+        'teachingQuality' ,
+        'user_id' ,
+        'subject_id',
+    ];
     
     public function user()
     {
@@ -18,8 +27,12 @@ class Post extends Model
     {
         return $this->belongsTo(Subject::class);
     }
-    public function users()
+    public function likes()
     {
-        return $this->belongsToMany(User::class,'likes');
+        return $this->hasMany(Like::class);
+    }
+    public function isLikedBy($user): bool 
+    {
+        return Like::where('user_id', $user->id)->where('post_id', $this->id)->first() !==null;
     }
 }

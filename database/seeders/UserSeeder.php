@@ -19,7 +19,7 @@ class UserSeeder extends Seeder
     public function run()
     {
         DB::table('users')->insert([
-            'name' => 'test_name',
+            'name' => 'test',
             'password' => Hash::make('test'),
             'created_at' => new DateTime(),
             'updated_at' => new DateTime(),
@@ -27,3 +27,5 @@ class UserSeeder extends Seeder
          ]);
     }
 }
+
+//php artisan migrate:fresh --seed

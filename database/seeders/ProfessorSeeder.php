@@ -21,5 +21,10 @@ class ProfessorSeeder extends Seeder
             'created_at' => new DateTime(),
             'updated_at' => new DateTime(),
          ]);
+        DB::table('professors')->insert([
+            'name' => '山嵜輝',
+            'created_at' => new DateTime(),
+            'updated_at' => new DateTime(),
+         ]);
     }
 }

@@ -17,7 +17,11 @@ class SubjectUserSeeder extends Seeder
     {
         DB::table('subject_user')->insert([
         'user_id' => 1,
-        'subject_id' => 1,
+        'subject_id' => 2,
+        ]);
+        DB::table('subject_user')->insert([
+        'user_id' => 1,
+        'subject_id' => 3,
         ]);
     }
 }
