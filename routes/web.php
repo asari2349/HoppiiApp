@@ -20,6 +20,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
 Route::get('/posts/index', [PostController::class, 'index'])->name('index');
 Route::get('/posts/create/{subject}', [PostController::class, 'create'])->name('create');
 Route::get('/posts/edit/{post}', [PostController::class, 'edit'])->name('edit');

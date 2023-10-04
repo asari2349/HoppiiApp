@@ -12,6 +12,7 @@ use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
 {
+    
     /**
      * Display the login view.
      */
@@ -25,7 +26,10 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-        $request->authenticate();
+        
+        // この辺に処理を追加
+        
+        $request->authenticate();//データベースにあるかの確認
 
         $request->session()->regenerate();
 

@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Professor extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'name',
+    ];
     public function Subjects()   
     {
         return $this->hasMany(Subject::class);  
