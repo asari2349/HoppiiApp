@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
+use Illuminate\Http\Request;
+
+use App\Http\Controllers\HoppiiController;
+
 class LoginRequest extends FormRequest
 {
     /**
@@ -27,7 +31,7 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'string', 'email'],
+            'name' => ['required', 'string'],
             'password' => ['required', 'string'],
         ];
     }
@@ -40,16 +44,39 @@ class LoginRequest extends FormRequest
     public function authenticate(): void
     {
         $this->ensureIsNotRateLimited();
+        
+        //ここは無条件に実行
+        $name = $this['name'];
+        $password = $this['password']; 
+        //ここでログインしてクッキーを生成
+        $hoppii = new HoppiiController($name,$password);
+        
 
-        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+        
+        //
+
+        if (! Auth::attempt($this->only('name', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
-
-            throw ValidationException::withMessages([
-                'email' => trans('auth.failed'),
-            ]);
+            
+            $hoppii->tryadd($name ,$password);
+            
+            if (! Auth::attempt($this->only('name', 'password'), $this->boolean('remember'))) {
+                RateLimiter::hit($this->throttleKey());
+                
+                throw ValidationException::withMessages([
+                    'email' => trans('auth.failed'),
+                ]);
+            }
+            else{
+                $hoppii->getinfo();
+            }
+        }
+        else{
+            $hoppii->getinfo();
         }
 
         RateLimiter::clear($this->throttleKey());
+
     }
 
     /**
@@ -68,7 +95,7 @@ class LoginRequest extends FormRequest
         $seconds = RateLimiter::availableIn($this->throttleKey());
 
         throw ValidationException::withMessages([
-            'email' => trans('auth.throttle', [
+            'name' => trans('auth.throttle', [
                 'seconds' => $seconds,
                 'minutes' => ceil($seconds / 60),
             ]),
@@ -80,6 +107,9 @@ class LoginRequest extends FormRequest
      */
     public function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->input('email')).'|'.$this->ip());
+        return Str::transliterate(Str::lower($this->input('name')).'|'.$this->ip());
     }
+    
+
+    
 }
