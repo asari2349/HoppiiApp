@@ -17,14 +17,10 @@ class ProfessorSeeder extends Seeder
     public function run()
     {
         DB::table('professors')->insert([
-            'name' => '平田英明',
+            'name' => 'testProfessor',
             'created_at' => new DateTime(),
             'updated_at' => new DateTime(),
          ]);
-        DB::table('professors')->insert([
-            'name' => '山嵜輝',
-            'created_at' => new DateTime(),
-            'updated_at' => new DateTime(),
-         ]);
+
     }
 }
