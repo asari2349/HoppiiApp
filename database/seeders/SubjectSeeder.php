@@ -17,23 +17,9 @@ class SubjectSeeder extends Seeder
     public function run()
     {
         DB::table('subjects')->insert([
-            'name' => 'マクロ経済学I',
-            'subjectcode' => 101535,
+            'name' => 'testSubject',
+            'subjectcode' => 00000000000,
             'professor_id' => 1,
-            'created_at' => new DateTime(),
-            'updated_at' => new DateTime(),
-         ]);
-        DB::table('subjects')->insert([
-            'name' => 'マクロ経済学II',
-            'subjectcode' => 101536,
-            'professor_id' => 1,
-            'created_at' => new DateTime(),
-            'updated_at' => new DateTime(),
-         ]);
-        DB::table('subjects')->insert([
-            'name' => 'デリバティブ入門',
-            'subjectcode' => 94013,
-            'professor_id' => 2,
             'created_at' => new DateTime(),
             'updated_at' => new DateTime(),
          ]);

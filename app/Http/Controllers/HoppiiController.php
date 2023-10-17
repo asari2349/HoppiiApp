@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Cookie\CookieJar;
+use GuzzleHttp\Exception\ClientException;
 use Symfony\Component\DomCrawler\Crawler;
 
 use App\Http\Controllers\Auth\RegisteredUserController;
@@ -65,44 +66,58 @@ class HoppiiController extends Controller
         $loginPage = $loginResponse->getBody();
         $crawler = new Crawler($loginPage);
         $action = $crawler->filter('form')->attr('action');
-        //echo $action;
-        $relayState = $crawler->filter('input[name="RelayState"]')->attr('value');
-        //echo $relayState;
-        $samlResponse = $crawler->filter('input[name="SAMLResponse"]')->attr('value');
-        //echo $samlResponce;
         
-        $values = [
-            'form_params' => [
-                'RelayState' => $relayState,
-                'SAMLResponse' => $samlResponse,
-                
-            ],
-        ];
-        
-        
-        $response = $this ->client->post($action, $values);
-        
-        
+        $relayStateElement = $crawler->filter('input[name="RelayState"]');
+        if($relayStateElement->count() > 0){
+            $relayState = $crawler->filter('input[name="RelayState"]')->attr('value');
+            //echo $relayState;
+            $samlResponse = $crawler->filter('input[name="SAMLResponse"]')->attr('value');
+
+            
+            $values = [
+                'form_params' => [
+                    'RelayState' => $relayState,
+                    'SAMLResponse' => $samlResponse,
+                    
+                ],
+            ];
+            
+            
+            $response = $this ->client->post($action, $values);
+            };
+
     }
     
     // データベースとマッチしなかったときに実行
     public function tryadd($name ,$password)
     {
         //dd($name);
-        //適当にAPIをget
-        $response = $this ->client->request('GET', 'https://hoppii.hosei.ac.jp/direct/announcement/user.json?n=1&d=200');
         
-        if ($response->getStatusCode() === 200) {
-            // 通信成功したときに新たにユーザーを登録する。
-            // 内容はRegisterControllerの一部を使用
-            $user = User::create([
-                'name' => $name,
-                'password' => Hash::make($password),
-            ]);
+            try {
+                $response = $this->client->request('GET', 'https://hoppii.hosei.ac.jp/direct/mySignup.json');
+            } catch (ClientException $e) {
+                $response = null; // エラーが発生した場合、$responseをnullに設定
+            }
+            
+            if ($response !== null) {
+            // 通信成功したときに新たにユーザーを登録する
+            
+            $user = User::where('name', $name)->first();
+            if (!$user){
+                $user = new User;
+                
+            };
+            $input = ['name' => $name,
+                'password' => Hash::make($password),];
+            $user->fill($input)->save();
             event(new Registered($user));
             Auth::login($user);
             
-        } 
+            return(true);
+            
+        } else{
+            return(false);
+        };
 
         
 
@@ -163,7 +178,7 @@ class HoppiiController extends Controller
             $state = $row[1];
             $subjectCode = $row[2];
             $subjectName = $row[3];
-            $professorName = $row[4];
+            $professorName = str_replace(" ", "", $row[4]);
             
             if ($state == "本登録"){
                 //professorがいないときは登録
@@ -174,11 +189,14 @@ class HoppiiController extends Controller
                     $professor->fill($input)->save();
                 };
                 
-                $subjectExist = Subject::where('subjectcode',$subjectCode)->first();
+                //コードと教員名が一致するレコードがないときに追加。
+                //コードが同じでも教員名が変わる可能性がある
+                $professorId =  Professor::where('name',$professorName)->first()->id;
+                $subjectExist = Subject::where('subjectcode',$subjectCode)->where('professor_id',$professorId)->first();
                 if(!$subjectExist){
                     $input = ['name' => $subjectName,
                               'subjectcode' => $subjectCode,
-                              'professor_id'=> Professor::where('name',$professorName)->first()->id]; 
+                              'professor_id'=> $professorId]; 
                     $subject = new Subject;
                     $subject->fill($input)->save();
                 };
@@ -192,33 +210,9 @@ class HoppiiController extends Controller
         $user->subjects()->sync($subjectIds);
         
         return redirect('/posts/index/');
+    
         
-    //     $crawler->filterxPath('//*[@id="currentSites"]//tr')->each(function($el){
-    //         // dd($el);
-    //         $state = $el->filter('//*[@headers="registration"]')->text();
-    //         if(strpos($state, "本登録") !== false) {
-    //             //var_dump($state);
-    //             $subjectCode = $el->filterxPath('td[@headers="classcode"]')->text();
-    //             dd($subjectCode);
-    //             $subjectName = $el->filterxPath('th[@headers="worksite"]/a')->text();
-    //             $professorName = $el->filterxPath('td[@headers="instractor"]')->text();
-                
-                
-
-    //             
-                
-                $subjectId = Subject::where('subjectcode',$subjectCode)->first()->id;
-                $subjectIds += $subjectId;
-    //         }
-            
-    //     });
-        $userId = Auth::user()->id;
-        $user = User::where('id',$userId)->first();
-        $user->subjects()->sync($subjectIds);
-        
-        return redirect('/posts/index/');
-    }
-        
+        }
         
 }
 

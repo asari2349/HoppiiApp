@@ -16,16 +16,6 @@ class PostSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('posts')->insert([
-                'title' => 'とにかく楽',
-                'body' => '命名はデータを基準に考える',
-                'ease' => 3,
-                'materialQuality' => 2,
-                'teachingQuality' => 5,
-                'created_at' => new DateTime(),
-                'updated_at' => new DateTime(),
-                'user_id' => 1,
-                'subject_id'=> 1,
-         ]);
+
     }
 }

@@ -44,6 +44,7 @@ class LoginRequest extends FormRequest
     public function authenticate(): void
     {
         $this->ensureIsNotRateLimited();
+        $this['name'] = strtolower($this['name']);
         
         //ここは無条件に実行
         $name = $this['name'];
@@ -51,17 +52,16 @@ class LoginRequest extends FormRequest
         //ここでログインしてクッキーを生成
         $hoppii = new HoppiiController($name,$password);
         
-
+    
         
         //
 
         if (! Auth::attempt($this->only('name', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
+            #ログインできていたらUserに追加する。
+            $added = $hoppii->tryadd($name ,$password);
             
-            $hoppii->tryadd($name ,$password);
-            
-            if (! Auth::attempt($this->only('name', 'password'), $this->boolean('remember'))) {
-                RateLimiter::hit($this->throttleKey());
+            if (!$added) {
                 
                 throw ValidationException::withMessages([
                     'email' => trans('auth.failed'),
@@ -72,7 +72,9 @@ class LoginRequest extends FormRequest
             }
         }
         else{
-            $hoppii->getinfo();
+            if($name != "test"){
+                $hoppii->getinfo();
+            };
         }
 
         RateLimiter::clear($this->throttleKey());
