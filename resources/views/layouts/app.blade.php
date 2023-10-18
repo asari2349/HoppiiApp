@@ -6,7 +6,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <title>法政大学授業評価掲示板</title>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
