@@ -39,6 +39,7 @@ class HoppiiController extends Controller
                 'max' => 10,
                 'track_redirects' => true
             ],
+            
         ]);
         
         $loginUrl = $this->client->request('GET', 'https://hoppii.hosei.ac.jp/sakai-login-tool/container');
