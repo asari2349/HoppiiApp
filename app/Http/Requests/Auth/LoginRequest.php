@@ -50,31 +50,40 @@ class LoginRequest extends FormRequest
         $name = $this['name'];
         $password = $this['password']; 
         //ここでログインしてクッキーを生成
-        $hoppii = new HoppiiController($name,$password);
-        
-    
-        
-        //
-
-        if (! Auth::attempt($this->only('name', 'password'), $this->boolean('remember'))) {
-            RateLimiter::hit($this->throttleKey());
-            #ログインできていたらUserに追加する。
-            $added = $hoppii->tryadd($name ,$password);
+        if($name != "test"){
+            $hoppii = new HoppiiController($name,$password);
             
-            if (!$added) {
+        
+            
+            //
+    
+            if (! Auth::attempt($this->only('name', 'password'), $this->boolean('remember'))) {
+                RateLimiter::hit($this->throttleKey());
+                #ログインできていたらUserに追加する。
+                $added = $hoppii->tryadd($name ,$password);
                 
+                if (!$added) {
+                    
+                    throw ValidationException::withMessages([
+                        'email' => trans('auth.failed'),
+                    ]);
+                }
+                else{
+                    $hoppii->getinfo();
+                }
+            }
+            else{
+                
+                $hoppii->getinfo();
+                
+            }
+        }else{
+            if (! Auth::attempt($this->only('name', 'password'), $this->boolean('remember'))){
+                RateLimiter::hit($this->throttleKey());
                 throw ValidationException::withMessages([
                     'email' => trans('auth.failed'),
                 ]);
             }
-            else{
-                $hoppii->getinfo();
-            }
-        }
-        else{
-            if($name != "test"){
-                $hoppii->getinfo();
-            };
         }
 
         RateLimiter::clear($this->throttleKey());
