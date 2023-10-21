@@ -39,7 +39,7 @@ class HoppiiController extends Controller
                 'max' => 10,
                 'track_redirects' => true
             ],
-            'timeout' => 60,
+            'verify' => false,
             
         ]);
         
