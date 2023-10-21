@@ -45,7 +45,7 @@ class HoppiiController extends Controller
         
         $loginUrl = $this->client->request('GET', 'https://hoppii.hosei.ac.jp/sakai-login-tool/container', [
             'curl' => [
-                CURLOPT_SSLVERSION => CURL_SSLVERSION_TLSv1_1
+                CURLOPT_SSLVERSION => CURL_SSLVERSION_TLSv1_0
             ],
         ]);
     
