@@ -41,7 +41,7 @@ class HoppiiController extends Controller
             ],
         ]);
         
-        $loginUrl = $this->client->request('GET', 'https://hoppii.hosei.ac.jp/portal/login');
+        $loginUrl = $this->client->request('GET', 'https://hoppii.hosei.ac.jp/sakai-login-tool/container');
     
         $loginPage = $loginUrl->getBody();
         $crawler = new Crawler($loginPage);
