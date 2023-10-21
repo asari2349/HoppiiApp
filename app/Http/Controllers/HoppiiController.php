@@ -39,13 +39,12 @@ class HoppiiController extends Controller
                 'max' => 10,
                 'track_redirects' => true
             ],
-            'verify' => false,
             
         ]);
         
         $loginUrl = $this->client->request('GET', 'https://hoppii.hosei.ac.jp/portal/login', [
             'curl' => [
-                CURLOPT_SSLVERSION => "CURL_SSLVERSION_TLSv1_2"
+                CURLOPT_SSLVERSION => "CURL_SSLVERSION_TLSv1_3"
             ],
         ]);
     
