@@ -39,10 +39,15 @@ class HoppiiController extends Controller
                 'max' => 10,
                 'track_redirects' => true
             ],
+            'timeout' => 60,
             
         ]);
         
-        $loginUrl = $this->client->request('GET', 'https://hoppii.hosei.ac.jp/sakai-login-tool/container');
+        $loginUrl = $this->client->request('GET', 'https://hoppii.hosei.ac.jp/sakai-login-tool/container', [
+            'curl' => [
+                CURLOPT_SSLVERSION => CURL_SSLVERSION_TLSv1_1
+            ],
+        ]);
     
         $loginPage = $loginUrl->getBody();
         $crawler = new Crawler($loginPage);
