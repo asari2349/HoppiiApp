@@ -40,7 +40,7 @@ class HoppiiController extends Controller
                 'track_redirects' => true
             ],
             'curl' => [
-                CURLOPT_SSL_CIPHER_LIST => 'TLSv1.2',
+                CURLOPT_SSL_CIPHER_LIST => 'TLSv1.1',
                 // You can adjust the SSL/TLS options as needed
             ],
         ]);
