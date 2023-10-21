@@ -8095,7 +8095,7 @@
                 "shasum": ""
             },
             "require": {
-                "ext-curl": "*",
+                "ext-curl": "^8.3",
                 "ext-json": "*",
                 "ext-mbstring": "*",
                 "illuminate/support": "^8.77|^9.27",
