@@ -1,5 +1,14 @@
 <x-app-layout>
-    <div class="">  
+    <div class=""> 
+        @if($strictshow)
+            <div class="">
+                <div class="w-full h-full fixed flex-1 top-1/2 left-0">
+                    <div class="text-center text-5xl py-30">
+                        4件は投稿してください
+                    </div>
+                </div>
+            </div> 
+        @else
         <div class="max-w-5xl mx-auto sm:px-6 lg:px-8 py-10 text-gray-900 dark:text-white">
         <!-- 検索機能 -->
             <div>
@@ -128,7 +137,7 @@
             <div>
                 {{ $posts->links() }}
             </div>
-            
+        @endif
     </div>
 </div> 
 </x-app-layout>

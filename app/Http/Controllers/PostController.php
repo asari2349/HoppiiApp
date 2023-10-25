@@ -17,6 +17,16 @@ class PostController extends Controller
     {
         $score=[];
         
+        #4件投稿していないときはポップアップを表示させる
+        $userPostedNumber = Auth::user()->posts()->count();
+        if($userPostedNumber < 4){
+            $strictshow = true;
+        }else{
+            $strictshow = false;
+        }
+        // if(Auth::user()->name == "test"){
+        //     $strictshow = false;
+        // }
         
         $keyword = $request->input('keyword');
         $category = $request->input('category');
@@ -46,10 +56,8 @@ class PostController extends Controller
             $score['teachingQuality'] = $posts->avg('teachingQuality');
         }
         
-
         
-        
-        return view('posts/index')->with(['posts' => $posts,'score' => $score,'keyword'=>$keyword,'category' =>$category,'order' => $order]);
+        return view('posts/index')->with(['posts' => $posts,'score' => $score,'keyword'=>$keyword,'category' =>$category,'order' => $order,"strictshow" => $strictshow]);
     }
     public function show(Post $post)
     {
