@@ -17,10 +17,15 @@ class PostController extends Controller
     {
         $score=[];
         
+        
         $keyword = $request->input('keyword');
         $category = $request->input('category');
+        $order = $request->input('order');
+        if(empty($order)) {//$keyword　が空ではない場合、検索処理を実行します
+            $order = ("created_at");
+        }
         if(empty($keyword)) {//$keyword　が空ではない場合、検索処理を実行します
-            $posts=Post::withCount('likes')->paginate(10);
+            $posts=Post::withCount('likes')->latest("{$order}")->paginate(10);
         }
         else{//$keyword　が空ではない場合、検索処理を実行します
 
@@ -29,20 +34,22 @@ class PostController extends Controller
                     $query->whereHas('professor', function ($query) use ($keyword) {
                         $query->where('name','like', "%{$keyword}%");
                     });
-                })->withCount('likes')->paginate(10);
+                })->withCount('likes')->latest("{$order}")->paginate(10);
             }
             elseif($category == "subject"){
                 $posts = Post::whereHas('subject', function ($query) use ($keyword) {
                     $query->where('name','like', "%{$keyword}%");
-                })->withCount('likes')->paginate(10);
+                })->withCount('likes')->latest("{$order}")->paginate(10);
             }
             $score['ease'] = $posts->avg('ease');
             $score['materialQuality'] = $posts->avg('materialQuality');
             $score['teachingQuality'] = $posts->avg('teachingQuality');
         }
         
+
         
-        return view('posts/index')->with(['posts' => $posts,'score' => $score,'keyword'=>$keyword,'category' =>$category]);
+        
+        return view('posts/index')->with(['posts' => $posts,'score' => $score,'keyword'=>$keyword,'category' =>$category,'order' => $order]);
     }
     public function show(Post $post)
     {
