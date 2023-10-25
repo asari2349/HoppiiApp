@@ -24,9 +24,10 @@ class PostController extends Controller
         }else{
             $strictshow = false;
         }
-        // if(Auth::user()->name == "test"){
-        //     $strictshow = false;
-        // }
+        
+        if(Auth::user()->name == "test"){
+            $strictshow = false;
+        }
         
         $keyword = $request->input('keyword');
         $category = $request->input('category');
