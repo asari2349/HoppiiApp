@@ -41,7 +41,7 @@ class HoppiiController extends Controller
             ],
             
         ]);
-        
+        #ログインページにアクセス
         $loginUrl = $this->client->request('GET', 'https://hoppii.hosei.ac.jp/portal/login', [
             'curl' => [
                 CURLOPT_SSLVERSION => "CURL_SSLVERSION_TLSv1_3"
@@ -51,7 +51,7 @@ class HoppiiController extends Controller
         $loginPage = $loginUrl->getBody();
         $crawler = new Crawler($loginPage);
     
-        // post先
+        // post先のurl
         $action = $crawler->filter('form')->attr('action');
         $actionUrl = "https://idp.hosei.ac.jp".$action;
 
@@ -64,14 +64,13 @@ class HoppiiController extends Controller
                 '_eventId_proceed' => '',
             ],
         ];
-        //dd($credentials);
+        //ログインのレスポンス
         $loginResponse = $this ->client->post($actionUrl, $credentials);
-        //echo $loginResponse->getBody();
         
         $loginPage = $loginResponse->getBody();
         $crawler = new Crawler($loginPage);
         $action = $crawler->filter('form')->attr('action');
-        
+        #さらにpostし、cliantに格納する。
         $relayStateElement = $crawler->filter('input[name="RelayState"]');
         if($relayStateElement->count() > 0){
             $relayState = $crawler->filter('input[name="RelayState"]')->attr('value');
@@ -96,7 +95,7 @@ class HoppiiController extends Controller
     // データベースとマッチしなかったときに実行
     public function tryadd($name ,$password)
     {
-        //dd($name);
+        //cookieを使い__constructionでログインできていれば通信成功する
         
             try {
                 $response = $this->client->request('GET', 'https://hoppii.hosei.ac.jp/direct/mySignup.json');
@@ -177,7 +176,7 @@ class HoppiiController extends Controller
             
             return null; // 選択しない場合はnullを返す
         });
-        // dd($table);
+        // $tableをデータベースに格納
         $subjectIds =[];
         foreach($table as $row){
             $state = $row[1];
