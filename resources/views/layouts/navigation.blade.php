@@ -6,7 +6,10 @@
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('welcome') }}">
-                        <x-application-logo class="block h-8 w-auto fill-current text-gray-800" />
+                        <h1>
+                            <x-application-logo class="block h-8 w-auto fill-current text-gray-800" alt = "法政大学授業掲示板"/>
+                        </h1>
+                        
                     </a>
                 </div>
 
