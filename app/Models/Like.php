@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Like extends Model
 {
+    protected $dates = [];
+    public $timestamps = false;
     use HasFactory;
     protected $fillable = [
         'post_id',
