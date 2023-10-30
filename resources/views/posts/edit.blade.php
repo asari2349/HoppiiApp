@@ -20,15 +20,16 @@
                             <textarea class=" w-1/2 h-36" id = "body" name="post[body]"  placeholder="200字まで">{{ $post->body }}</textarea>
                         </div>
                         @php
-                            $scores = ['簡単さ', '教材の質','授業の質']; // セレクトボックスの属性を配列で定義
+                        $scores = ['簡単さ', '教材の質', '授業の質']; // セレクトボックスの属性を配列で定義
+                        $scorevars = ['ease', 'materialQuality', 'teachingQuality'];
                         @endphp
                         
-                        @foreach ($scores as $score)
+                        @foreach ($scores as $index => $score)
                             <div>
                                 <h2>{{ $score }}</h2>
-                                <select name="post[{{ $score }}]">
+                                <select name="post[{{ $scorevars[$index] }}]">
                                     @for ($i = 1; $i <= 5; $i++)
-                                        @if ($post->$score == $i)
+                                        @if ($post->{$scorevars[$index]} == $i)
                                             <option value="{{ $i }}" selected>{{ $i }}</option>
                                         @else
                                             <option value="{{ $i }}">{{ $i }}</option>

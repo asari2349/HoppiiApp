@@ -86,9 +86,8 @@ class PostController extends Controller
     {
         $input = $request['post'];
         //Post.phpのユーザとは別物
-        $input += ['user_id' => $request->user()->id]; 
         $post->fill($input)->save();
-        return view('/posts/index')->with(['posts' => $post->get()]);
+        return redirect('/posts/show/'. $post ->id);
     }
     public function like(Request $request)
     {
