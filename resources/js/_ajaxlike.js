@@ -11,7 +11,7 @@ $(function () {
           'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
         },  //↑name属性がcsrf-tokenのmetaタグのcontent属性の値を取得
         url: '/posts/like', //通信先アドレスで、このURLをあとでルートで設定します
-        type: 'POST', //HTTPメソッドの種別を指定します。1.9.0以前の場合はtype:を使用。
+        method: 'POST', //HTTPメソッドの種別を指定します。1.9.0以前の場合はtype:を使用。
         data: { //サーバーに送信するデータ
           'post_id': likePostId //いいねされた投稿のidを送る
         },
