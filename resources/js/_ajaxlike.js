@@ -25,6 +25,7 @@ $(function () {
       //通信失敗した時の処理
       .fail(function () {
         console.log('fail'); 
+        console.log($like);
       });
     });
 });
